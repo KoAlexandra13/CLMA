@@ -20,35 +20,36 @@ public class Main {
                 {6.47 + alpha},
                 {2.38},
                 {10.48 + alpha}};
+        System.out.println("\nИсходная матрица");
+        Functions.matrixOut(initialMatrix);
+
+        Double[][] matrixTranspose = Functions.transpose(initialMatrix);
+        System.out.println("\nТранспонированная матрица:");
+        Functions.matrixOut(matrixTranspose);
+
+        System.out.println("\n(матрица * транспонированная):");
+        Double[][] mainMatrix = Functions.multiplyMatrix(initialMatrix, matrixTranspose);
+        Functions.matrixOut(mainMatrix);
+
+        System.out.println("\n(матрица транспонированная * f):");
+        Functions.matrixOut(Functions.multiplyMatrix(matrixTranspose, freeTerms));
+
         // Прямой ход
-        ArrayList<Object> matrixList = Functions.gaussianElimination(initialMatrix, freeTerms);
-        Double[][] triangulisedMatrix = (Double[][])matrixList.get(0);
-        Double[][] triangulisedFreeTerms = (Double[][])matrixList.get(1);
-        Double[][] unitMatrixAfterTriangularization = (Double[][])matrixList.get(2);
-        Double determinant = (Double)matrixList.get(3);
-        System.out.print("\nТреугольная матрица:\n");
-        Functions.matrixOut(triangulisedMatrix, triangulisedFreeTerms);
+        ArrayList<Object> matrixList = Functions.forward(mainMatrix, freeTerms);
+        Double[][] matrixS = (Double[][])matrixList.get(0);
+        Double[][] matrixD = (Double[][])matrixList.get(1);
+        Double determinant = (Double)matrixList.get(2);
+        System.out.println("\nB:");
+        Functions.matrixOut(Functions.multiplyMatrix(matrixD, matrixS));
 
-        // Обратный ход
-        Double[][] xVector = Functions.findVariables(triangulisedMatrix, triangulisedFreeTerms);
-        System.out.println("\nВектор неизвестных:");
-        Functions.matrixOut(xVector);
+        ArrayList<Object> matrixList2 = Functions.backward(matrixS, matrixD,freeTerms);
 
-        // Обратная матрица
-        Double[][] inverseMatrix = Functions.findReverseMatrix(triangulisedMatrix, unitMatrixAfterTriangularization);
-        System.out.print("\nВектор невязки:\n");
+        System.out.println("\nY:");
+        Functions.matrixOut((Double[][])matrixList2.get(0));
 
-        // Невязка
-        Double[][] misalignment = Functions.misalignment(initialMatrix, xVector, freeTerms);
-        for (int i = 0; i < misalignment.length; i++)
-            System.out.printf("dx[%d] = %E\n", i, misalignment[i][0]);
-        System.out.println("\nОбратная матрица: ");
-        Functions.matrixOut(inverseMatrix);
-        System.out.print("\nОпределитель: ");
-        System.out.println(determinant);
+        System.out.println("\nX:");
+        Functions.matrixOut((Double[][])matrixList2.get(1));
 
-        // Проверка
-        System.out.println("\nПроверка (матрица * обратная):");
-        Functions.matrixOut(Functions.multiplyMatrix(initialMatrix, inverseMatrix));
+        System.out.println("\nОпределитель: " + determinant);
     }
 }
