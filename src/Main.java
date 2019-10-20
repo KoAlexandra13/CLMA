@@ -1,7 +1,6 @@
 import Functions.Functions;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -28,13 +27,14 @@ public class Main {
         Functions.matrixOut(matrixTranspose);
 
         System.out.println("\n(матрица * транспонированная):");
-        Double[][] mainMatrix = Functions.multiplyMatrix(initialMatrix, matrixTranspose);
+        Double[][] mainMatrix = Functions.multiplyMatrix(matrixTranspose, initialMatrix);
         Functions.matrixOut(mainMatrix);
 
         System.out.println("\n(матрица транспонированная * f):");
         Functions.matrixOut(Functions.multiplyMatrix(matrixTranspose, freeTerms));
+        freeTerms = Functions.multiplyMatrix(matrixTranspose, freeTerms);
 
-        // Прямой ход
+
         ArrayList<Object> matrixList = Functions.forward(mainMatrix, freeTerms);
         Double[][] matrixS = (Double[][])matrixList.get(0);
         Double[][] matrixD = (Double[][])matrixList.get(1);
@@ -42,7 +42,7 @@ public class Main {
         System.out.println("\nB:");
         Functions.matrixOut(Functions.multiplyMatrix(matrixD, matrixS));
 
-        ArrayList<Object> matrixList2 = Functions.backward(matrixS, matrixD,freeTerms);
+        ArrayList<Object> matrixList2 = Functions.findMatrixXAndY(matrixS, matrixD,freeTerms);
 
         System.out.println("\nY:");
         Functions.matrixOut((Double[][])matrixList2.get(0));

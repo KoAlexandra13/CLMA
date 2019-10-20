@@ -1,7 +1,11 @@
-# Lab 1. Gaussian elimination
+# Lab 2. Square root method
+
 ### Task:
-**Using the Gauss method of solving systems of linear algebraic equations**:
+**Solve the system of linear algebraic equations by the square root method**:
+
 1. Solve the system of linear algebraic equations
-2. Find the incoherence of found solution
-3. Calculate the initial matrix determinant
-4. Find the reverse matrix. Perform a check ( A * A^(-1) = E )
+
+2. Calculate the initial matrix determinant
+
+
+**As initial matrix use matrix(A) from lab_1**
